@@ -37,12 +37,18 @@ section>h2+.list{margin-top:1.8rem;display:block}
 .yr{font-family:var(--head);font-weight:700;color:var(--muted)}
 .meta{color:var(--muted);margin:.3rem 0 .8rem}
 .item p{margin:.5rem 0;max-width:62ch}
-.ph{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin:1.2rem 0}
-.ph.book{grid-template-columns:minmax(140px,190px)}
-.ph img,.slot{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
-.ph.book img,.ph.book .slot{aspect-ratio:2/3}
-.slot{background:var(--lilac2);display:grid;place-items:center;color:var(--muted);font-size:.9rem}
-.slot:nth-child(even){background:var(--blue2)}
+.ph{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem .75rem;margin:1.2rem 0;align-items:start}
+.ph.book{grid-template-columns:minmax(140px,200px)}
+.ph figure{margin:0}
+.ph img{width:100%;height:auto;display:block}
+.ph .vid{grid-column:1/-1}
+.ph video{width:100%;max-height:70vh;display:block;background:var(--ink)}
+.ph figcaption{font-size:.8rem;line-height:1.4;color:var(--muted);margin-top:.35rem}
+.slot{aspect-ratio:4/3;background:var(--lilac2);display:grid;place-items:center;color:var(--muted);font-size:.9rem}
+.ph.book .slot{aspect-ratio:2/3}
+.ph figure:nth-child(even) .slot{background:var(--blue2)}
+.portrait{float:right;width:min(260px,40%);height:auto;margin:0 0 1rem 2rem}
+.bio h3{clear:both}
 .rel{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.3rem}
 .card{display:block;background:var(--blue2);border-left:4px solid var(--blue);padding:.7rem 1rem;text-decoration:none;min-width:200px;max-width:340px}
 .card:hover,.card:focus-visible{background:var(--lilac2);border-color:var(--lilac)}
@@ -62,9 +68,16 @@ footer p{margin:.2rem 0}
 /* ======================================================================
    HOW TO EDIT
    • Add a project/book/text: copy one block in `items`, change the fields.
-   • Photos: put image files in an /images folder and list them, e.g.
-       img:["images/donner-corps-1.jpg","images/donner-corps-2.jpg"]
-     Leave `img` out to show placeholders. Use null for a single placeholder.
+   • Photos and videos: upload files to the /images folder, then list them in `img`.
+     Each entry is {src:"images/file.jpg", credit:"..."}.  A .mp4 or .webm file
+     shows as a video player (full width), so a video can replace a photo.
+     Credit line example (shown in small text under the photo):
+       credit:"Artist, Title, 2026. Courtesy of the artist. Photo: Name"
+       credit:L("English credit","Crédit en français")
+     Use {} for a placeholder slot. Leave `img` out to show 3 placeholders
+     (1 for books); use img:[] for none. File names are case-sensitive.
+   • Links: add url:"https://..." to any item. A "Read the article" link opens it
+     in a new tab, and the title is clickable too.
    • Link a project and a publication: put the other item's id in `rel`.
      The link appears on both sides automatically.
    • Texts have an optional url:"https://..." that links the title.
@@ -74,27 +87,27 @@ const L=(en,fr)=>({en,fr});
 const items=[
 /* ---------- curatorial projects (newest first) ---------- */
 {id:"marie-laurencin",type:"project",year:"2027",soon:true,title:"Marie Laurencin",role:L("Assistant curator","Commissaire assistante"),venue:"Musée du Luxembourg, Paris"},
-{id:"donner-corps",type:"project",year:"2026",title:L("Donner Corps. Women Artists and Ceramics","Donner Corps. Artistes femmes et céramique"),role:L("Curator","Commissaire"),venue:"Musée Bertrand, Châteauroux",
+{id:"donner-corps",type:"project",year:"2026",img:[{src:"images/donnercorps1.jpg",credit:""},{src:"images/donnercorps2.jpg",credit:""},{src:"images/donnercorps3.jpg",credit:""},{src:"images/donnercorps4.jpeg",credit:""}],title:L("Donner Corps. Women Artists and Ceramics","Donner Corps. Artistes femmes et céramique"),role:L("Curator","Commissaire"),venue:"Musée Bertrand, Châteauroux",
  text:L("An exhibition on contemporary ceramics and the body, developed in dialogue with the museum’s collection and local ceramics history. Artists include Elsa Sahal, Migline Paroumanou and Myriam Mihindou.","Une exposition consacrée à la céramique contemporaine et au corps, conçue en dialogue avec la collection du musée et l’histoire céramique locale. Avec notamment Elsa Sahal, Migline Paroumanou et Myriam Mihindou."),rel:["donner-corps-book"]},
-{id:"trajectoires",type:"project",year:"2025",title:"Trajectoires que je suis : lauréates du prix AWARE",role:L("Co-curator, with Matylda Taszycka","Co-commissaire, avec Matylda Taszycka"),venue:"FRAC Champagne-Ardenne, Reims",
+{id:"trajectoires",type:"project",year:"2025",img:[{src:"images/trajectoires1.jpeg",credit:""},{src:"images/trajectoires2.jpeg",credit:""},{src:"images/trajectoires3.jpeg",credit:""},{src:"images/trajectoires4.jpeg",credit:""}],title:"Trajectoires que je suis : lauréates du prix AWARE",role:L("Co-curator, with Matylda Taszycka","Co-commissaire, avec Matylda Taszycka"),venue:"FRAC Champagne-Ardenne, Reims",
  text:L("An exhibition of the laureates of the AWARE prize. The work included research, checklist development, liaison with artists and lenders, interpretive texts and coordination with the production and registrar teams.","Une exposition des lauréates du prix AWARE. Recherche, élaboration de la liste d’œuvres, relations avec les artistes et les prêteurs, textes d’interprétation et coordination avec les équipes de production et de régie.")},
 {id:"american-west",type:"project",year:"2024",title:"Women Artists of the American West: Trailblazers at the Turn of the 20th Century",role:L("Research assistant","Assistante de recherche"),venue:"History Jackson Hole, Wyoming, USA",img:[]},
 {id:"modern-women",type:"project",year:"2023",title:"Modern Women",role:L("Co-curator, with Camille Morineau and Matylda Taszycka","Co-commissaire, avec Camille Morineau et Matylda Taszycka"),venue:"Frieze Masters, London",
  text:L("A presentation for Frieze Masters, coordinating galleries and object selections in an international art fair context.","Une présentation pour Frieze Masters, avec coordination des galeries et de la sélection des œuvres dans le contexte d’une foire internationale."),rel:["gagosian"]},
-{id:"spotlight",type:"project",year:"2022",title:"Spotlight",role:L("Co-curator, with Camille Morineau and Matylda Taszycka","Co-commissaire, avec Camille Morineau et Matylda Taszycka"),venue:"Frieze Masters, London",
+{id:"spotlight",type:"project",year:"2022",img:[{src:"images/spotlight1.jpg",credit:""},{src:"images/spotlightvid.mp4",credit:""}],title:"Spotlight",role:L("Co-curator, with Camille Morineau and Matylda Taszycka","Co-commissaire, avec Camille Morineau et Matylda Taszycka"),venue:"Frieze Masters, London",
  text:L("Research, gallery liaison and display coordination.","Recherche, relations avec les galeries et coordination de l’accrochage.")},
 {id:"pionnieres",type:"project",year:"2022",title:"Pionnières : Artistes dans le Paris des années folles",role:L("Research assistant","Assistante de recherche"),venue:"Musée du Luxembourg, Paris",img:[],rel:["pioneers"]},
 /* ---------- book publications ---------- */
-{id:"donner-corps-book",type:"book",year:"2026",title:"Donner Corps. Artistes femmes et céramique",role:L("Editor and writer","Éditrice et autrice"),venue:"Éditions de l’Aube",rel:["donner-corps"]},
+{id:"donner-corps-book",type:"book",year:"2026",img:[{src:"images/couvertureDonnerCorps.jpg",credit:""}],title:"Donner Corps. Artistes femmes et céramique",role:L("Editor and writer","Éditrice et autrice"),venue:"Éditions de l’Aube",rel:["donner-corps"]},
 {id:"maggy-rouff",type:"book",year:L("Since 2025","Depuis 2025"),title:L("Biography of Maggy Rouff","Biographie de Maggy Rouff"),role:L("Editor","Éditrice")},
-{id:"oser-le-nu",type:"book",year:"2024–25",title:"Oser le nu",role:L("Researcher and writing assistant","Chercheuse et assistante d’écriture"),venue:"Camille Morineau, Flammarion",
+{id:"oser-le-nu",type:"book",year:"2024–25",img:[{src:"images/CouvertureOserLeNu.jpg",credit:""}],title:"Oser le nu",role:L("Researcher and writing assistant","Chercheuse et assistante d’écriture"),venue:"Camille Morineau, Flammarion",
  text:L("Art-historical research, manuscript development, editorial follow-up and proofing of the layout.","Recherche en histoire de l’art, développement du manuscrit, suivi éditorial et relecture de la maquette.")},
-{id:"shifting-sands",type:"book",year:"2024",title:"Manal AlDowayan: Shifting Sands: A Battle Song",role:L("Researcher and writing assistant","Chercheuse et assistante d’écriture"),venue:"Electa",
+{id:"shifting-sands",type:"book",year:"2024",img:[{src:"images/couvertureShiftingSands.JPG",credit:""}],title:"Manal AlDowayan: Shifting Sands: A Battle Song",role:L("Researcher and writing assistant","Chercheuse et assistante d’écriture"),venue:"Electa",
  text:L("Research and writing support for the essay “In the continuity of community”.","Recherche et assistance à l’écriture pour l’essai « In the continuity of community ».")},
 /* ---------- exhibition texts, blog and review pieces ---------- */
 {id:"gagosian",type:"text",year:"2023",title:"Modern Women",role:L("Author","Autrice"),venue:"Gagosian Quarterly",rel:["modern-women"]},
 {id:"pioneers",type:"text",year:"2022",title:L("Pioneers: artists in the Paris of the Roaring Twenties","Pionnières : artistes dans le Paris des années folles"),role:L("Author","Autrice"),venue:"awarewomenartists.com",rel:["pionnieres"]},
-/* ---------- press (replace this placeholder; add rel:["donner-corps"] to link it to a project) ---------- */
+/* ---------- press: replace this placeholder. url = address of the article (opens in a new tab). Add rel:["donner-corps"] to link it to a project. ---------- */
 {id:"press-1",type:"press",year:"2026",title:L("Article title (placeholder)","Titre de l’article (exemple)"),role:L("Press","Presse"),venue:L("Publication name","Nom de la publication"),url:""}
 ];
 const talks=[
@@ -128,20 +141,28 @@ const ui={
  curatorial:L("curatorial projects","projets curatoriaux"),books:L("book publications","publications"),
  texts:L("exhibition texts","textes et critiques"),press:L("press","presse"),talks:L("talks and events","conférences et événements"),about:L("bio and cv","bio et cv"),
  kind:{project:L("Curatorial project","Projet curatorial"),book:L("Publication","Publication"),text:L("Text","Texte"),press:L("Press","Presse")},
- soon:L("coming soon","à venir"),photo:L("photo","photo"),rel:L("Related","À voir aussi"),
+ soon:L("coming soon","à venir"),read:L("Read the article","Lire l’article"),more:L("More information","En savoir plus"),photo:L("photo","photo"),rel:L("Related","À voir aussi"),
  exp:L("experience and education","parcours et formation"),cv:L("Download full CV (PDF)","Télécharger le CV complet (PDF)"),contact:L("contact","contact")
 };
+const PORTRAIT="images/photo-bio.PNG"; /* rename your file photo-bio.PNG (no space); use "" to hide */
 const EMAIL="Eleonore.besse@hotmail.co.uk",LINKEDIN="https://www.linkedin.com/in/eléonore-besse-ba98411b2";
 let lang=(navigator.language||"").slice(0,2)==="fr"?"fr":"en";try{lang=localStorage.getItem("lang")||lang}catch(e){}
 const t=v=>v==null?"":typeof v==="string"?v:(v[lang]||v.en);
 const byId=id=>items.find(o=>o.id===id);
 const related=it=>[...new Set([...(it.rel||[]),...items.filter(o=>(o.rel||[]).includes(it.id)).map(o=>o.id)])].map(byId).filter(Boolean);
+const isVid=s=>/\.(mp4|webm|mov)$/i.test(s);
+function fig(m,it){
+ const o=typeof m==="string"?{src:m}:(m||{}),cap=t(o.credit);
+ const body=!o.src?`<div class="slot">${t(ui.photo)}</div>`:isVid(o.src)?`<video controls playsinline preload="metadata" src="${o.src}"${o.poster?` poster="${o.poster}"`:""}></video>`:`<img src="${o.src}" alt="${t(o.alt)||t(it.title)}" loading="lazy">`;
+ return `<figure${o.src&&isVid(o.src)?' class="vid"':""}>${body}${cap?`<figcaption>${cap}</figcaption>`:""}</figure>`;
+}
 function item(it){
  const n=it.soon?0:it.img?it.img.length:({project:3,book:1}[it.type]||0);
- const ph=n?`<div class="ph ${it.type}">`+Array.from({length:n},(_,i)=>it.img&&it.img[i]?`<img src="${it.img[i]}" alt="${t(it.title)}" loading="lazy">`:`<div class="slot">${t(ui.photo)}</div>`).join("")+"</div>":"";
+ const ph=n?`<div class="ph ${it.type}">`+Array.from({length:n},(_,i)=>fig(it.img&&it.img[i],it)).join("")+"</div>":"";
  const r=related(it),cards=r.length?`<div class="rel" aria-label="${t(ui.rel)}">`+r.map(o=>`<a class="card" href="#${o.id}"><small>${t(ui.kind[o.type])}</small><b>${t(o.title)}</b></a>`).join("")+"</div>":"";
- const title=it.url?`<a href="${it.url}">${t(it.title)}</a>`:t(it.title);
- return `<article class="item" id="${it.id}"><div class="yr">${t(it.year)}</div><div><h3>${title}</h3><p class="meta">${[t(it.role),t(it.venue)].filter(Boolean).join(", ")}</p>${it.soon?`<span class="soon">${t(ui.soon)}</span>`:""}${it.text?`<p>${t(it.text)}</p>`:""}${ph}${cards}</div></article>`;
+ const title=it.url?`<a href="${it.url}" target="_blank" rel="noopener noreferrer">${t(it.title)}</a>`:t(it.title);
+ const link=it.url?`<p><a href="${it.url}" target="_blank" rel="noopener noreferrer">${t(ui[it.type==="press"||it.type==="text"?"read":"more"])} ↗</a></p>`:"";
+ return `<article class="item" id="${it.id}"><div class="yr">${t(it.year)}</div><div><h3>${title}</h3><p class="meta">${[t(it.role),t(it.venue)].filter(Boolean).join(", ")}</p>${it.soon?`<span class="soon">${t(ui.soon)}</span>`:""}${it.text?`<p>${t(it.text)}</p>`:""}${link}${ph}${cards}</div></article>`;
 }
 const rows=a=>a.map(x=>`<div class="item sm"><div class="yr">${t(x.y)}</div><div><b>${t(x.t)}</b><br><span class="meta">${x.v}</span></div></div>`).join("");
 const sec=(id,type)=>`<section id="${id}"><h2>${t(ui[id])}</h2><div class="list">${items.filter(o=>o.type===type).map(item).join("")}</div></section>`;
@@ -154,7 +175,7 @@ function render(){
  <div class="hero" id="top"><h1><span>éléonore besse</span></h1><p>${t(ui.tag)}</p></div>
  ${sec("curatorial","project")}${sec("books","book")}${sec("texts","text")}${sec("press","press")}
  <section id="talks"><h2>${t(ui.talks)}</h2><div class="list">${rows(talks.map(x=>({y:x.y,t:x.t,v:x.v})))}</div></section>
- <section id="about" class="bio"><h2>${t(ui.about)}</h2><div class="list" style="padding-top:1.8rem">${bio.map(p=>`<p>${t(p)}</p>`).join("")}
+ <section id="about" class="bio"><h2>${t(ui.about)}</h2><div class="list" style="padding-top:1.8rem">${PORTRAIT?`<img class="portrait" src="${PORTRAIT}" alt="Éléonore Besse">`:""}${bio.map(p=>`<p>${t(p)}</p>`).join("")}
  <h3>${t(ui.exp)}</h3><div style="margin-top:.8rem">${rows(cv)}</div>
  <p><a href="cv.pdf">${t(ui.cv)}</a></p></div></section>
  <footer><h3>${t(ui.contact)}</h3><p><a href="mailto:${EMAIL}">${EMAIL}</a></p><p><a href="${LINKEDIN}">LinkedIn</a></p></footer>`;
