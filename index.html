@@ -37,16 +37,32 @@ section>h2+.list{margin-top:1.8rem;display:block}
 .yr{font-family:var(--head);font-weight:700;color:var(--muted)}
 .meta{color:var(--muted);margin:.3rem 0 .8rem}
 .item p{margin:.5rem 0;max-width:62ch}
-.ph{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem .75rem;margin:1.2rem 0;align-items:start}
+.ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,220px));gap:1rem .75rem;margin:1.2rem 0;align-items:start}
+.ph.pending{visibility:hidden}
 .ph.book{grid-template-columns:minmax(140px,200px)}
+.ph .newrow{grid-column-start:1}
 .ph figure{margin:0}
-.ph img{width:100%;height:auto;display:block}
-.ph .vid{grid-column:1/-1}
-.ph video{width:100%;max-height:70vh;display:block;background:var(--ink)}
+.thumb{display:block;position:relative;width:100%;padding:0;border:0;background:var(--lilac2);cursor:zoom-in}
+.ph:not(.book) .thumb{aspect-ratio:1/1}
+.thumb img,.thumb video{display:block;width:100%;height:100%;object-fit:cover}
+.ph.book .thumb img{height:auto}
+.thumb:hover,.thumb:focus-visible{outline:3px solid var(--lilac);outline-offset:0}
+.thumb.v::after{content:"▶";position:absolute;inset:0;margin:auto;width:3rem;height:3rem;display:grid;place-items:center;background:var(--lilac);color:var(--ink)}
 .ph figcaption{font-size:.8rem;line-height:1.4;color:var(--muted);margin-top:.35rem}
-.slot{aspect-ratio:4/3;background:var(--lilac2);display:grid;place-items:center;color:var(--muted);font-size:.9rem}
+.slot{aspect-ratio:1/1;background:var(--lilac2);display:grid;place-items:center;color:var(--muted);font-size:.9rem}
 .ph.book .slot{aspect-ratio:2/3}
 .ph figure:nth-child(even) .slot{background:var(--blue2)}
+#lb{position:fixed;inset:0;z-index:20;background:#fffffffa;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3.5rem 1rem 1rem}
+#lb[hidden]{display:none}
+#lb .stage{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
+#lb img,#lb video{max-width:100%;max-height:calc(100vh - 9rem);display:block}
+#lb .cap{font-size:.9rem;color:var(--muted);margin:.8rem 0 0;max-width:70ch;text-align:center;min-height:1.4em}
+#lb button{position:absolute;width:2.8rem;height:2.8rem;border:0;background:var(--lilac);color:var(--ink);font:700 1.6rem/1 var(--head);cursor:pointer}
+#lb button:hover{background:var(--blue)}
+#lb .x{top:.8rem;right:.8rem}
+#lb .pv,#lb .nx{top:50%;transform:translateY(-50%)}
+#lb .pv{left:.8rem}#lb .nx{right:.8rem}
+#lb.one .pv,#lb.one .nx{display:none}
 .portrait{float:right;width:min(260px,40%);height:auto;margin:0 0 1rem 2rem}
 .bio h3{clear:both}
 .rel{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.3rem}
@@ -74,6 +90,8 @@ footer p{margin:.2rem 0}
      Credit line example (shown in small text under the photo):
        credit:"Artist, Title, 2026. Courtesy of the artist. Photo: Name"
        credit:L("English credit","Crédit en français")
+     Photos show as equal square thumbnails (portraits first, landscapes below);
+     click to enlarge. Videos work the same way.
      Use {} for a placeholder slot. Leave `img` out to show 3 placeholders
      (1 for books); use img:[] for none. File names are case-sensitive.
    • Links: add url:"https://..." to any item. A "Read the article" link opens it
@@ -141,7 +159,7 @@ const ui={
  curatorial:L("curatorial projects","projets curatoriaux"),books:L("book publications","publications"),
  texts:L("exhibition texts","textes et critiques"),press:L("press","presse"),talks:L("talks and events","conférences et événements"),about:L("bio and cv","bio et cv"),
  kind:{project:L("Curatorial project","Projet curatorial"),book:L("Publication","Publication"),text:L("Text","Texte"),press:L("Press","Presse")},
- soon:L("coming soon","à venir"),read:L("Read the article","Lire l’article"),more:L("More information","En savoir plus"),photo:L("photo","photo"),rel:L("Related","À voir aussi"),
+ soon:L("coming soon","à venir"),enlarge:L("Enlarge","Agrandir"),close:L("Close","Fermer"),read:L("Read the article","Lire l’article"),more:L("More information","En savoir plus"),photo:L("photo","photo"),rel:L("Related","À voir aussi"),
  exp:L("experience and education","parcours et formation"),cv:L("Download full CV (PDF)","Télécharger le CV complet (PDF)"),contact:L("contact","contact")
 };
 const PORTRAIT="images/photo-bio.PNG"; /* rename your file photo-bio.PNG (no space); use "" to hide */
@@ -153,12 +171,14 @@ const related=it=>[...new Set([...(it.rel||[]),...items.filter(o=>(o.rel||[]).in
 const isVid=s=>/\.(mp4|webm|mov)$/i.test(s);
 function fig(m,it){
  const o=typeof m==="string"?{src:m}:(m||{}),cap=t(o.credit);
- const body=!o.src?`<div class="slot">${t(ui.photo)}</div>`:isVid(o.src)?`<video controls playsinline preload="metadata" src="${o.src}"${o.poster?` poster="${o.poster}"`:""}></video>`:`<img src="${o.src}" alt="${t(o.alt)||t(it.title)}" loading="lazy">`;
- return `<figure${o.src&&isVid(o.src)?' class="vid"':""}>${body}${cap?`<figcaption>${cap}</figcaption>`:""}</figure>`;
+ if(!o.src)return `<figure><div class="slot">${t(ui.photo)}</div></figure>`;
+ const v=isVid(o.src);
+ const media=v?`<video muted playsinline preload="metadata" src="${o.src}#t=0.1"${o.poster?` poster="${o.poster}"`:""}></video>`:`<img src="${o.src}" alt="${t(o.alt)||t(it.title)}">`;
+ return `<figure data-src="${o.src}"${v?' data-v="1"':""}><button class="thumb${v?" v":""}" type="button" aria-label="${t(ui.enlarge)}">${media}</button>${cap?`<figcaption>${cap}</figcaption>`:""}</figure>`;
 }
 function item(it){
  const n=it.soon?0:it.img?it.img.length:({project:3,book:1}[it.type]||0);
- const ph=n?`<div class="ph ${it.type}">`+Array.from({length:n},(_,i)=>fig(it.img&&it.img[i],it)).join("")+"</div>":"";
+ const ph=n?`<div class="ph ${it.type} pending">`+Array.from({length:n},(_,i)=>fig(it.img&&it.img[i],it)).join("")+"</div>":"";
  const r=related(it),cards=r.length?`<div class="rel" aria-label="${t(ui.rel)}">`+r.map(o=>`<a class="card" href="#${o.id}"><small>${t(ui.kind[o.type])}</small><b>${t(o.title)}</b></a>`).join("")+"</div>":"";
  const title=it.url?`<a href="${it.url}" target="_blank" rel="noopener noreferrer">${t(it.title)}</a>`:t(it.title);
  const link=it.url?`<p><a href="${it.url}" target="_blank" rel="noopener noreferrer">${t(ui[it.type==="press"||it.type==="text"?"read":"more"])} ↗</a></p>`:"";
@@ -179,7 +199,53 @@ function render(){
  <h3>${t(ui.exp)}</h3><div style="margin-top:.8rem">${rows(cv)}</div>
  <p><a href="cv.pdf">${t(ui.cv)}</a></p></div></section>
  <footer><h3>${t(ui.contact)}</h3><p><a href="mailto:${EMAIL}">${EMAIL}</a></p><p><a href="${LINKEDIN}">LinkedIn</a></p></footer>`;
+ arrange();
 }
+/* portraits first, landscapes below; every gallery revealed once sorted */
+function arrange(){
+ document.querySelectorAll(".ph").forEach(g=>{
+  const done=()=>g.classList.remove("pending");setTimeout(done,4000);
+  if(g.classList.contains("book"))return done();
+  const figs=[...g.children],media=f=>f.querySelector("img,video");
+  Promise.all(figs.map(f=>new Promise(res=>{const m=media(f);if(!m)return res();
+   if(m.tagName==="IMG"){m.complete&&m.naturalWidth?res():(m.onload=m.onerror=res)}
+   else{m.readyState>=1?res():(m.onloadedmetadata=m.onerror=res)}}))).then(()=>{
+   const land=f=>{const m=media(f);return m&&(m.naturalWidth||m.videoWidth)>(m.naturalHeight||m.videoHeight)?1:0};
+   const sorted=figs.map((f,i)=>[f,land(f),i]).sort((a,b)=>a[1]-b[1]||a[2]-b[2]).map(x=>x[0]);
+   sorted.forEach(f=>g.appendChild(f));
+   const first=sorted.find(land);if(first)first.classList.add("newrow");
+  }).finally(done);
+ });
+}
+/* click-to-enlarge viewer (photos and videos) */
+const lb=document.createElement("div");lb.id="lb";lb.hidden=true;lb.setAttribute("role","dialog");lb.setAttribute("aria-modal","true");
+lb.innerHTML='<button class="x" type="button">×</button><button class="pv" type="button">‹</button><button class="nx" type="button">›</button><div class="stage"></div><p class="cap"></p>';
+document.body.appendChild(lb);
+let figs=[],cur=0,opener=null;
+function show(i){
+ cur=(i+figs.length)%figs.length;const f=figs[cur],src=f.dataset.src,im=f.querySelector("img");
+ lb.querySelector(".stage").innerHTML=f.dataset.v?`<video controls autoplay playsinline src="${src}"></video>`:`<img src="${src}" alt="${im?im.alt:""}">`;
+ const c=f.querySelector("figcaption");lb.querySelector(".cap").textContent=c?c.textContent:"";
+ lb.classList.toggle("one",figs.length<2);
+}
+function openLB(f){
+ figs=[...f.parentElement.querySelectorAll("figure[data-src]")];opener=document.activeElement;
+ lb.querySelector(".x").setAttribute("aria-label",t(ui.close));
+ lb.hidden=false;document.body.style.overflow="hidden";show(figs.indexOf(f));lb.querySelector(".x").focus();
+}
+function closeLB(){lb.hidden=true;lb.querySelector(".stage").innerHTML="";document.body.style.overflow="";if(opener)opener.focus()}
+document.addEventListener("click",e=>{
+ const b=e.target.closest(".thumb");if(b&&b.closest("figure[data-src]"))return openLB(b.closest("figure"));
+ if(lb.hidden)return;
+ if(e.target.closest(".x")||e.target===lb||e.target.classList.contains("stage"))closeLB();
+ else if(e.target.closest(".pv"))show(cur-1);else if(e.target.closest(".nx"))show(cur+1);
+});
+document.addEventListener("keydown",e=>{
+ if(lb.hidden)return;
+ if(e.key==="Escape")closeLB();
+ else if(e.target.tagName!=="VIDEO"&&e.key==="ArrowLeft")show(cur-1);
+ else if(e.target.tagName!=="VIDEO"&&e.key==="ArrowRight")show(cur+1);
+});
 function setLang(l){lang=l;try{localStorage.setItem("lang",l)}catch(e){}render()}
 render();
 if(location.hash){const e=document.getElementById(location.hash.slice(1));e&&e.scrollIntoView()}
