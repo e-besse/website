@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>éléonore besse</title>
+<meta name="description" content="Éléonore Besse – curator, researcher and writer. Commissaire d'exposition, chercheuse et autrice.">
+<!-- Fonts: Optima and Gill Sans on Apple devices; Candara and Gill Sans MT / Calibri on Windows. No web fonts are loaded. -->
+<style>
+:root{--ink:#2b2640;--muted:#6b6784;--lilac:#cdbdf0;--lilac2:#ece6fa;--blue:#bfdaf3;--blue2:#e4f0fb;
+--body:Optima,Candara,"Segoe UI",sans-serif;--head:"Gill Sans","Gill Sans MT",Calibri,"Trebuchet MS",sans-serif}
+html{scroll-padding-top:4.5rem}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;font:18px/1.65 var(--body);color:var(--ink);background:#fff}
+h1,h2,h3,.gs{font-family:var(--head);font-weight:700;text-transform:lowercase;letter-spacing:-.01em;line-height:1.1;margin:0}
+a{color:inherit;text-decoration:underline;text-decoration-color:var(--lilac);text-decoration-thickness:3px;text-underline-offset:3px}
+a:hover{background:var(--lilac2)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+header{position:sticky;top:0;z-index:5;background:#fffffff0;border-bottom:1px solid var(--lilac2);display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.6rem;padding:.8rem 1.5rem}
+header .mark{font-size:1.3rem;text-decoration:none;margin-right:auto}
+header nav{display:flex;flex-wrap:wrap;gap:.2rem 1.2rem}
+header nav a{font-size:.95rem;text-decoration:none}
+header nav a:hover{background:var(--blue2)}
+.lang button{font:700 .9rem var(--head);background:none;border:0;padding:.2rem .5rem;cursor:pointer;color:var(--muted)}
+.lang button[aria-pressed=true]{background:var(--lilac);color:var(--ink)}
+.hero{max-width:1000px;margin:auto;padding:7rem 1.5rem 3rem}
+.hero h1{font-size:clamp(3rem,11vw,8rem)}
+.hero h1 span{background:linear-gradient(transparent 58%,var(--lilac) 58%)}
+.hero p{font-size:1.35rem;max-width:36ch;margin:2rem 0 0}
+section{max-width:1000px;margin:auto;padding:3.5rem 1.5rem 1rem}
+section>h2{font-size:clamp(1.8rem,5vw,2.6rem);display:inline;background:linear-gradient(transparent 60%,var(--blue) 60%)}
+.item{display:grid;grid-template-columns:7rem 1fr;gap:1.5rem;padding:2rem 0;border-top:1px solid var(--lilac2)}
+section>h2+.list{margin-top:1.8rem;display:block}
+.item.sm{padding:.9rem 0}
+.item h3{font-size:1.5rem}
+.item:target h3{background:linear-gradient(transparent 60%,var(--lilac) 60%);display:inline}
+.yr{font-family:var(--head);font-weight:700;color:var(--muted)}
+.meta{color:var(--muted);margin:.3rem 0 .8rem}
+.item p{margin:.5rem 0;max-width:62ch}
+.ph{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin:1.2rem 0}
+.ph.book{grid-template-columns:minmax(140px,190px)}
+.ph img,.slot{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.ph.book img,.ph.book .slot{aspect-ratio:2/3}
+.slot{background:var(--lilac2);display:grid;place-items:center;color:var(--muted);font-size:.9rem}
+.slot:nth-child(even){background:var(--blue2)}
+.rel{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.3rem}
+.card{display:block;background:var(--blue2);border-left:4px solid var(--blue);padding:.7rem 1rem;text-decoration:none;min-width:200px;max-width:340px}
+.card:hover,.card:focus-visible{background:var(--lilac2);border-color:var(--lilac)}
+.card small{display:block;color:var(--muted);font-size:.85rem}
+.card b{font:700 1.05rem/1.2 var(--head);text-transform:lowercase}
+.soon{display:inline-block;background:var(--lilac);padding:0 .6rem;margin-top:.5rem;font:700 .9rem/1.6 var(--head);text-transform:lowercase}
+.bio p{max-width:62ch}
+.bio h3{margin:2.2rem 0 .4rem;font-size:1.3rem}
+footer{max-width:1000px;margin:3rem auto 0;padding:2rem 1.5rem 4rem;border-top:1px solid var(--lilac2)}
+footer p{margin:.2rem 0}
+@media(max-width:640px){body{font-size:17px}.item{grid-template-columns:1fr;gap:.2rem}.hero{padding-top:4rem}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ======================================================================
+   HOW TO EDIT
+   • Add a project/book/text: copy one block in `items`, change the fields.
+   • Photos: put image files in an /images folder and list them, e.g.
+       img:["images/donner-corps-1.jpg","images/donner-corps-2.jpg"]
+     Leave `img` out to show placeholders. Use null for a single placeholder.
+   • Link a project and a publication: put the other item's id in `rel`.
+     The link appears on both sides automatically.
+   • Texts have an optional url:"https://..." that links the title.
+   • Bilingual fields are L("English","Français"). Plain strings are shown as-is.
+   ====================================================================== */
+const L=(en,fr)=>({en,fr});
+const items=[
+/* ---------- curatorial projects (newest first) ---------- */
+{id:"marie-laurencin",type:"project",year:"2027",soon:true,title:"Marie Laurencin",role:L("Assistant curator","Commissaire assistante"),venue:"Musée du Luxembourg, Paris"},
+{id:"donner-corps",type:"project",year:"2026",title:L("Donner Corps. Women Artists and Ceramics","Donner Corps. Artistes femmes et céramique"),role:L("Curator","Commissaire"),venue:"Musée Bertrand, Châteauroux",
+ text:L("An exhibition on contemporary ceramics and the body, developed in dialogue with the museum’s collection and local ceramics history. Artists include Elsa Sahal, Migline Paroumanou and Myriam Mihindou.","Une exposition consacrée à la céramique contemporaine et au corps, conçue en dialogue avec la collection du musée et l’histoire céramique locale. Avec notamment Elsa Sahal, Migline Paroumanou et Myriam Mihindou."),rel:["donner-corps-book"]},
+{id:"trajectoires",type:"project",year:"2025",title:"Trajectoires que je suis : lauréates du prix AWARE",role:L("Co-curator, with Matylda Taszycka","Co-commissaire, avec Matylda Taszycka"),venue:"FRAC Champagne-Ardenne, Reims",
+ text:L("An exhibition of the laureates of the AWARE prize. The work included research, checklist development, liaison with artists and lenders, interpretive texts and coordination with the production and registrar teams.","Une exposition des lauréates du prix AWARE. Recherche, élaboration de la liste d’œuvres, relations avec les artistes et les prêteurs, textes d’interprétation et coordination avec les équipes de production et de régie.")},
+{id:"american-west",type:"project",year:"2024",title:"Women Artists of the American West: Trailblazers at the Turn of the 20th Century",role:L("Research assistant","Assistante de recherche"),venue:"History Jackson Hole, Wyoming, USA",img:[]},
+{id:"modern-women",type:"project",year:"2023",title:"Modern Women",role:L("Co-curator, with Camille Morineau and Matylda Taszycka","Co-commissaire, avec Camille Morineau et Matylda Taszycka"),venue:"Frieze Masters, London",
+ text:L("A presentation for Frieze Masters, coordinating galleries and object selections in an international art fair context.","Une présentation pour Frieze Masters, avec coordination des galeries et de la sélection des œuvres dans le contexte d’une foire internationale."),rel:["gagosian"]},
+{id:"spotlight",type:"project",year:"2022",title:"Spotlight",role:L("Co-curator, with Camille Morineau and Matylda Taszycka","Co-commissaire, avec Camille Morineau et Matylda Taszycka"),venue:"Frieze Masters, London",
+ text:L("Research, gallery liaison and display coordination.","Recherche, relations avec les galeries et coordination de l’accrochage.")},
+{id:"pionnieres",type:"project",year:"2022",title:"Pionnières : Artistes dans le Paris des années folles",role:L("Research assistant","Assistante de recherche"),venue:"Musée du Luxembourg, Paris",img:[],rel:["pioneers"]},
+/* ---------- book publications ---------- */
+{id:"donner-corps-book",type:"book",year:"2026",title:"Donner Corps. Artistes femmes et céramique",role:L("Editor and writer","Éditrice et autrice"),venue:"Éditions de l’Aube",rel:["donner-corps"]},
+{id:"maggy-rouff",type:"book",year:L("Since 2025","Depuis 2025"),title:L("Biography of Maggy Rouff","Biographie de Maggy Rouff"),role:L("Editor","Éditrice")},
+{id:"oser-le-nu",type:"book",year:"2024–25",title:"Oser le nu",role:L("Researcher and writing assistant","Chercheuse et assistante d’écriture"),venue:"Camille Morineau, Flammarion",
+ text:L("Art-historical research, manuscript development, editorial follow-up and proofing of the layout.","Recherche en histoire de l’art, développement du manuscrit, suivi éditorial et relecture de la maquette.")},
+{id:"shifting-sands",type:"book",year:"2024",title:"Manal AlDowayan: Shifting Sands: A Battle Song",role:L("Researcher and writing assistant","Chercheuse et assistante d’écriture"),venue:"Electa",
+ text:L("Research and writing support for the essay “In the continuity of community”.","Recherche et assistance à l’écriture pour l’essai « In the continuity of community ».")},
+/* ---------- exhibition texts, blog and review pieces ---------- */
+{id:"gagosian",type:"text",year:"2023",title:"Modern Women",role:L("Author","Autrice"),venue:"Gagosian Quarterly",rel:["modern-women"]},
+{id:"pioneers",type:"text",year:"2022",title:L("Pioneers: artists in the Paris of the Roaring Twenties","Pionnières : artistes dans le Paris des années folles"),role:L("Author","Autrice"),venue:"awarewomenartists.com",rel:["pionnieres"]},
+/* ---------- press (replace this placeholder; add rel:["donner-corps"] to link it to a project) ---------- */
+{id:"press-1",type:"press",year:"2026",title:L("Article title (placeholder)","Titre de l’article (exemple)"),role:L("Press","Presse"),venue:L("Publication name","Nom de la publication"),url:""}
+];
+const talks=[
+{y:"2026–27",t:L("Lecturer, MA module “Gender and Curating”","Chargée de cours, module de Master « Genre et commissariat »"),v:"Sorbonne Nouvelle, Paris"},
+{y:"2026–27",t:L("Lecturer, L2 modules “British Art 1850–today” and “British Art 1900–today”","Chargée de cours, L2 « Art britannique 1850–aujourd’hui » et « 1900–aujourd’hui »"),v:"Institut Catholique de Paris"},
+{y:"2025–26",t:L("Teaching fellow, M2 Gender Studies","Vacataire, M2 Études de genre"),v:"Paris 1 Panthéon-Sorbonne"},
+{y:"2025",t:L("Speaker, Feminist Art History Conference","Intervenante, Feminist Art History Conference"),v:"Washington, DC"},
+{y:"2023",t:L("Guest speaker","Intervenante invitée"),v:"American University of Paris"},
+{y:"2023",t:L("Roundtable conceived, organised and introduced for AWARE","Table ronde conçue, organisée et introduite pour AWARE"),v:"National Portrait Gallery, London"},
+{y:"",t:L("Lecture cycle on women artists in the Musée d’Orsay collections","Cycle de conférences sur les artistes femmes des collections du Musée d’Orsay"),v:"Musée d’Orsay, Paris"}
+];
+const cv=[
+{y:L("Since Jan 2026","Depuis janv. 2026"),t:L("Project Manager for the Director","Cheffe de projet auprès de la directrice"),v:"AWARE at Centre Pompidou, Paris"},
+{y:L("2024–2025","2024–2025"),t:L("Project Manager for the Director","Cheffe de projet auprès de la directrice"),v:"AWARE, Paris"},
+{y:"2023",t:L("Researcher","Chercheuse"),v:"AWARE, Paris"},
+{y:"2021–2023",t:L("Research Programmes Assistant","Assistante des programmes de recherche"),v:"AWARE, Paris"},
+{y:"2021",t:L("Curatorial and Research Intern","Stagiaire en commissariat et recherche"),v:"Royal Scottish Academy, Edinburgh"},
+{y:"",t:L("MSc History of Art, Theory and Display, First Class","MSc History of Art, Theory and Display, mention First Class"),v:"University of Edinburgh"},
+{y:"",t:L("BA (Hons) and MA English Language and Literature","BA (Hons) et MA Langue et littérature anglaises"),v:"University of Oxford"}
+];
+const bio=[
+L("Éléonore Besse is Project Manager for the Director at AWARE: Archives of Women Artists, Research and Exhibitions, where she conducts research on women artists of the 19th and 20th centuries and helps conceive and coordinate national and international curatorial projects as well as working on fundraising and development. For AWARE, she has worked on projects with museums such as the Centre Pompidou, Paris, National Portrait Gallery, London, and with art fairs such as Frieze, UK.",
+  "Éléonore Besse est cheffe de projet auprès de la directrice d’AWARE : Archives of Women Artists, Research and Exhibitions, où elle mène des recherches sur les artistes femmes des XIXe et XXe siècles, contribue à la conception et à la coordination de projets curatoriaux nationaux et internationaux, et travaille à la recherche de financements et au développement. Pour AWARE, elle a travaillé sur des projets avec des musées tels que le Centre Pompidou, Paris, et la National Portrait Gallery, Londres, ainsi qu’avec des foires comme Frieze, Royaume-Uni."),
+L("A graduate of Oxford University and the University of Edinburgh, Éléonore Besse is also an independent curator and researcher. Her recent curatorial projects include curating Donner Corps. Artistes femmes et céramique at the Musée Bertrand, Châteauroux and co-curating Trajectoires que je suis : lauréates du prix AWARE at FRAC Champagne-Ardenne, Reims.",
+  "Diplômée de l’Université d’Oxford et de l’Université d’Édimbourg, Éléonore Besse est également commissaire d’exposition et chercheuse indépendante. Parmi ses projets récents : le commissariat de Donner Corps. Artistes femmes et céramique au Musée Bertrand, Châteauroux, et le co-commissariat de Trajectoires que je suis : lauréates du prix AWARE au FRAC Champagne-Ardenne, Reims."),
+L("She also writes, teaches and lectures on modern and contemporary art, gender studies and curatorial practices. She has developed and teaches the Masters 2 module ‘Gender and Curating’ at the Sorbonne Nouvelle and lectures undergraduate students at the ICP – Université Catholique de Paris.",
+  "Elle écrit, enseigne et donne des conférences sur l’art moderne et contemporain, les études de genre et les pratiques curatoriales. Elle a conçu et enseigne le module de Master 2 « Genre et commissariat » à la Sorbonne Nouvelle, et intervient auprès d’étudiants de licence à l’ICP – Université Catholique de Paris.")
+];
+const ui={
+ tag:L("Curator, researcher and writer, based in Paris.","Commissaire, chercheuse et autrice, basée à Paris."),
+ curatorial:L("curatorial projects","projets curatoriaux"),books:L("book publications","publications"),
+ texts:L("exhibition texts","textes et critiques"),press:L("press","presse"),talks:L("talks and events","conférences et événements"),about:L("bio and cv","bio et cv"),
+ kind:{project:L("Curatorial project","Projet curatorial"),book:L("Publication","Publication"),text:L("Text","Texte"),press:L("Press","Presse")},
+ soon:L("coming soon","à venir"),photo:L("photo","photo"),rel:L("Related","À voir aussi"),
+ exp:L("experience and education","parcours et formation"),cv:L("Download full CV (PDF)","Télécharger le CV complet (PDF)"),contact:L("contact","contact")
+};
+const EMAIL="Eleonore.besse@hotmail.co.uk",LINKEDIN="https://www.linkedin.com/in/eléonore-besse-ba98411b2";
+let lang=(navigator.language||"").slice(0,2)==="fr"?"fr":"en";try{lang=localStorage.getItem("lang")||lang}catch(e){}
+const t=v=>v==null?"":typeof v==="string"?v:(v[lang]||v.en);
+const byId=id=>items.find(o=>o.id===id);
+const related=it=>[...new Set([...(it.rel||[]),...items.filter(o=>(o.rel||[]).includes(it.id)).map(o=>o.id)])].map(byId).filter(Boolean);
+function item(it){
+ const n=it.soon?0:it.img?it.img.length:({project:3,book:1}[it.type]||0);
+ const ph=n?`<div class="ph ${it.type}">`+Array.from({length:n},(_,i)=>it.img&&it.img[i]?`<img src="${it.img[i]}" alt="${t(it.title)}" loading="lazy">`:`<div class="slot">${t(ui.photo)}</div>`).join("")+"</div>":"";
+ const r=related(it),cards=r.length?`<div class="rel" aria-label="${t(ui.rel)}">`+r.map(o=>`<a class="card" href="#${o.id}"><small>${t(ui.kind[o.type])}</small><b>${t(o.title)}</b></a>`).join("")+"</div>":"";
+ const title=it.url?`<a href="${it.url}">${t(it.title)}</a>`:t(it.title);
+ return `<article class="item" id="${it.id}"><div class="yr">${t(it.year)}</div><div><h3>${title}</h3><p class="meta">${[t(it.role),t(it.venue)].filter(Boolean).join(", ")}</p>${it.soon?`<span class="soon">${t(ui.soon)}</span>`:""}${it.text?`<p>${t(it.text)}</p>`:""}${ph}${cards}</div></article>`;
+}
+const rows=a=>a.map(x=>`<div class="item sm"><div class="yr">${t(x.y)}</div><div><b>${t(x.t)}</b><br><span class="meta">${x.v}</span></div></div>`).join("");
+const sec=(id,type)=>`<section id="${id}"><h2>${t(ui[id])}</h2><div class="list">${items.filter(o=>o.type===type).map(item).join("")}</div></section>`;
+function render(){
+ document.documentElement.lang=lang;
+ document.getElementById("app").innerHTML=`
+ <header><a class="mark gs" href="#top">éléonore besse</a>
+ <nav>${["curatorial","books","texts","press","talks","about"].map(k=>`<a href="#${k}">${t(ui[k])}</a>`).join("")}</nav>
+ <div class="lang" role="group" aria-label="Language"><button onclick="setLang('en')" aria-pressed="${lang==="en"}">EN</button><button onclick="setLang('fr')" aria-pressed="${lang==="fr"}">FR</button></div></header>
+ <div class="hero" id="top"><h1><span>éléonore besse</span></h1><p>${t(ui.tag)}</p></div>
+ ${sec("curatorial","project")}${sec("books","book")}${sec("texts","text")}${sec("press","press")}
+ <section id="talks"><h2>${t(ui.talks)}</h2><div class="list">${rows(talks.map(x=>({y:x.y,t:x.t,v:x.v})))}</div></section>
+ <section id="about" class="bio"><h2>${t(ui.about)}</h2><div class="list" style="padding-top:1.8rem">${bio.map(p=>`<p>${t(p)}</p>`).join("")}
+ <h3>${t(ui.exp)}</h3><div style="margin-top:.8rem">${rows(cv)}</div>
+ <p><a href="cv.pdf">${t(ui.cv)}</a></p></div></section>
+ <footer><h3>${t(ui.contact)}</h3><p><a href="mailto:${EMAIL}">${EMAIL}</a></p><p><a href="${LINKEDIN}">LinkedIn</a></p></footer>`;
+}
+function setLang(l){lang=l;try{localStorage.setItem("lang",l)}catch(e){}render()}
+render();
+if(location.hash){const e=document.getElementById(location.hash.slice(1));e&&e.scrollIntoView()}
+</script>
+</body>
+</html>
